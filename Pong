@@ -1,0 +1,65 @@
+import zen.core.Zen;
+public class Pong {
+
+	public static void main(String[] args) {
+		Zen.create(400,600);
+		
+		int bx = 190, by = 290; 
+		int px = 165, py = 490;
+		int cx = 165, cy = 90;
+		
+		int dbx = 10;
+		int dby = 10;
+		//int dbx = Zen.getRandomNumber(-10, 10);
+		//int dby = Zen.getRandomNumber(-10, 10);
+		
+		
+		while(true){
+			Zen.setBackground("white");
+			Zen.setColor("red");
+			Zen.fillOval(bx, by, 20, 20);
+		
+			bx = bx - dbx;
+			by = by - dby;
+			
+			if (bx < 0||bx > 390){
+				dbx = -dbx;
+			
+			}
+			if (by < 0 || by > 590){
+				dby = -dby;
+			}
+			
+			Zen.setColor("blue");
+			Zen.fillRect(px, py, 70, 15);
+			Zen.fillRect(cx, 90, 70, 15);
+			
+			if (Zen.isKeyPressed("right")){
+				px = px + 10;
+			}
+			if (Zen.isKeyPressed("left")){
+				px = px - 10;
+			}
+			
+			if (px < bx  && px+70 > bx && by + 20> py && by + 20 < py + 20 ){
+				//dbx = -dbx;
+				dby = -dby;
+			}
+			if (cx < bx  && cx+70 > bx && by > cy && by < cy + 20 ){
+				//dbx = -dbx;
+				dby = -dby;
+			}
+			
+			
+			
+			
+			
+			
+			
+			Zen.buffer(33);
+		}
+			
+
+	}
+
+}
