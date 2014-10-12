@@ -1,0 +1,54 @@
+import zen.core.Zen;
+
+public class BouncingBall {
+	public static void main(String[] args){
+		Zen.create(800,500);
+		int x=20;
+		int y=20;
+		int dy=0;
+		int dx=3;
+		int px;
+		int py;
+		while(true){
+			Zen.setBackground("white");
+			Zen.setColor("black");
+			Zen.fillOval(x, y, 20, 20);
+			Zen.setColor("red");
+			
+			px = Zen.getMouseX();
+			py = Zen.getMouseY();
+			Zen.fillRect(px, py, 10, 40);
+			
+			x=x+dx;
+			y=y+dy;
+			dy=dy+1;
+			
+			
+			if(y >= 500){
+				
+				dy=-dy;
+				dy= dy * 9 / 10;
+			}
+			if(x >= 800){
+				x = 800;
+				dx = -dx;
+				dx = dx *9/10;
+				
+			}
+			if(x <= 0){
+				x= 0;
+				dx = -dx;
+				dx = dx*9/10;
+			}
+			
+			if (Math.abs(x-px)<10 && Math.abs(y-py)<30) {
+				dx = (x-px)/2;
+				dy = (y-py)/2;
+			}
+			
+			
+			Zen.buffer(33);
+		}
+	}
+
+}
