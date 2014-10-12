@@ -1,0 +1,84 @@
+import zen.core.Zen;
+import zen.shape.*;
+
+
+public class FlappyBird {
+
+	public static void main(String[] args) {
+		Zen.create(400,600);
+		
+		Image bird = new Image("../flappy.png");
+		bird.set(200,300);
+		
+		int gravity = 2;
+		int speed = 0;
+		int x1 = 400;
+		int x2 = 650;
+		int gap1 = Zen.dice(450) + 100;
+		int gap2 = Zen.dice(450) + 100;
+		
+		
+		while(true){
+			
+			Zen.setBackground("light blue");
+			
+			bird.draw();
+			
+			bird.changeY(speed);
+			
+			speed = speed + gravity;
+
+			if (Zen.isKeyPressed("space")){
+				speed = -10 ;
+			}
+			if (bird.getY() > 600||bird.getY()<0){
+				bird.set(200,300);
+				speed = 0;
+				
+				x1 = 450;
+				gap1 = Zen.dice(450)+100;
+				x2 = 650;
+				gap2 = Zen.dice(450) + 100;
+			}
+			
+			x1 = x1 - 3;
+			
+			Zen.setColor("green");
+			Zen.fillRect(x1, 0, 50, gap1-50);
+			Zen.fillRect(x1, gap1+50, 50, 600 - gap1 - 50 );
+		
+			x2 = x2 - 3;
+			
+			Zen.fillRect(x2, 0, 50, gap2 - 50);
+			Zen.fillRect(x2, gap2+50, 50, 600-gap2-50);
+			
+			if (x1 <-50) {
+				x1 = 450;
+				gap1 = Zen.dice(450)+100;
+			}
+			if (x2 <-50) {
+				x2 = 450;
+				gap2 = Zen.dice(450) + 100;
+			}
+			
+			if (bird.getY() > 0 && bird.getY() < gap1 - 50 && bird.getX() > x1 - 45 && bird.getX() < x1){
+				bird.set(200,650);
+			}
+			if (bird.getY() < 600 && bird.getY() > gap1 + 50 && bird.getX() > x1 - 45 && bird.getX()< x1){
+				bird.set(200,650);
+			}
+			if (bird.getY() > 0 && bird.getY() < gap2 - 50 && bird.getX() > x2 - 45 && bird.getX() < x2){
+				bird.set(200,650);
+			}
+			if (bird.getY() < 600 && bird.getY() > gap2 + 50 && bird.getX() > x2 - 45 && bird.getX() < x2){
+				bird.set(200,650);
+			}
+			
+
+
+			
+			Zen.buffer(33);
+		}
+	}
+
+}
