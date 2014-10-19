@@ -1,0 +1,182 @@
+import zen.core.Zen;
+
+import java.util.*;
+
+import javax.swing.JOptionPane;
+
+public class CaptureTheFlag {
+	
+	static String myName;
+	static String myTeam;
+
+	public static void main(String[] args) {
+		
+		Zen.connect("ctf");
+		Zen.create(800, 400);
+		
+		int x = 700, y = 200;
+		
+		myName = JOptionPane.showInputDialog("What's your name?");
+		myTeam = JOptionPane.showInputDialog("What team are you on, red or blue?");
+		
+		if(Zen.isKeyPressed("esc")){
+			String reset = JOptionPane.showInputDialog("Do you want to reset the game? yes/no");
+		}
+		
+		Zen.write(myName + "team", myTeam);
+		String p = Zen.read("players");
+		if(p == null){
+			Zen.write("players", "raman");
+		}
+		else{
+			Zen.write("players", p + "raman");
+		}
+		
+		Zen.write("raman x,", x );
+		Zen.write("raman y,", y );
+		Zen.write("raman team", "blue" );
+		
+		while(true){
+			drawBackground();
+			drawFlag("red");
+			drawFlag("blue");
+			
+			String players = Zen.read("players");
+			for(String player : players.split(",")){
+				drawPlayer(player);
+			}
+			
+			
+			
+			if(onOpponentSide()) {
+				if(iHaveTheFlag("red")){
+					summonFlag("red");
+				}
+				else if (nobodyHasFlag("red") && closeTo("red")){
+					pickUpFlag("red");
+				}
+				if(closeTo("keshav") || closeTo("ravi")){
+					x = 700;
+					y = 200;
+					if(iHaveTheFlag("red")){
+						dropFlag("red");
+					}
+					
+				}
+				
+			}
+			else {
+				if ( iHaveTheFlag("red")){
+					dropFlag("red");
+					
+				}
+			}
+			
+			
+			if(Zen.isKeyPressed("left") && x > 10){
+				x = x - 5;
+			}
+			if(Zen.isKeyPressed("right") && x < 790){
+				x = x + 5;
+			}
+			if(Zen.isKeyPressed("up") && y > 10){
+				y = y - 5;
+			}
+			if(Zen.isKeyPressed("down") && y < 390){
+				y = y + 5;
+			}
+			
+			
+			Zen.write("raman x,", x );
+			Zen.write("raman y,", y );
+			
+			Zen.buffer(33);
+			
+		}
+		
+	}
+
+	private static void dropFlag(String name) {
+		Zen.write(name + "owner", "nobody");
+		Zen.write(name + "x", 50);
+		Zen.write(name + "y", 200);
+		
+	}
+
+	private static boolean closeTo(String name) {
+		int dx = Math.abs(Zen.readInt(name + "x") - Zen.readInt("ramanx"));
+		int dy = Math.abs(Zen.readInt(name + "y") - Zen.readInt("ramany"));
+		if( dx < 30 && dy < 30){
+			return true;
+		}
+		return false;
+	}
+
+	private static void pickUpFlag(String name) {
+		Zen.write(name + "owner", "raman");
+		
+	}
+
+
+	private static boolean nobodyHasFlag(String name) {
+		String owner = Zen.read(name + "owner");
+		
+		
+		if(owner.equals("nobody")){
+			return true;
+		}
+		return false;
+	}
+
+	private static void summonFlag(String name) {
+		
+		Zen.write(name + "x", Zen.readInt("ramanx"));
+		Zen.write(name + "y", Zen.readInt("ramany"));
+	}
+
+	private static boolean iHaveTheFlag(String name) {
+		String owner = Zen.read(name + "owner");
+		
+		
+		if(owner.equals("raman")){
+			return true;
+		}
+		
+		return false;
+	}
+
+	private static boolean onOpponentSide() {
+		if(Zen.readInt("ramanx") < 400) {
+			return true;
+		}
+		
+		return false;
+	}
+
+	private static void drawFlag(String name) {
+		int x = Zen.readInt(name +"x");
+		int y = Zen.readInt(name +"y");
+		
+		Zen.setColor(name);
+		Zen.fillRect(x - 15, y - 15, 30, 30);
+	
+		
+	}
+
+	private static void drawPlayer(String name) {
+		int x = Zen.readInt(name + "x");
+		int y = Zen.readInt(name + "y");
+		String team = Zen.read(name + " team");
+		
+		Zen.setColor(team);
+		Zen.fillOval(x - 10, y - 10,  20, 20);
+	}
+
+	private static void drawBackground() {
+		Zen.setBackground("green");
+		Zen.setColor("white");
+		Zen.fillRect(399, 0, 2, 400);
+		
+	}
+
+}
